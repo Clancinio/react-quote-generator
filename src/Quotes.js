@@ -6,7 +6,30 @@ const Quotes = () => {
   const [index, setIndex] = useState(0);
 
   const { text, author } = quotes[index];
-  console.log(quotes);
+
+  const checkNumber = (number) => {
+    if (number > quotes.length - 1) {
+      return 0;
+    }
+    if (number < 0) {
+      return quotes.length - 1;
+    }
+    return number;
+  };
+
+  const nextQuote = () => {
+    setIndex((index) => {
+      let newIndex = index + 1;
+      return checkNumber(newIndex);
+    });
+  };
+
+  const prevQuote = () => {
+    setIndex((index) => {
+      let newIndex = index - 1;
+      return checkNumber(newIndex);
+    });
+  };
 
   return (
     <article className="review">
@@ -20,10 +43,10 @@ const Quotes = () => {
       <h4 className="author">{author}</h4>
       <p className="info">{text}</p>
       <div className="button-container">
-        <button className="prev-btn">
+        <button className="prev-btn" onClick={prevQuote}>
           <FaChevronLeft />
         </button>
-        <button className="next-btn">
+        <button className="next-btn" onClick={nextQuote}>
           <FaChevronRight />
         </button>
       </div>
