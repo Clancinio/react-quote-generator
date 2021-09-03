@@ -1,4 +1,5 @@
 import React from "react";
+import Quotes from "./Quotes";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
           <h2>Quote Generator</h2>
           <div className="underline"></div>
         </div>
+        <Quotes />
       </section>
     </main>
   );
