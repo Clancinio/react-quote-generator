@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa";
 import quotes from "./data";
 
 const Quotes = () => {
   const [index, setIndex] = useState(0);
+  const [profileImage, setProfileImage] = useState();
 
-  const { text, author } = quotes[index];
+  const { quote, author } = quotes[index];
 
   const checkNumber = (number) => {
     if (number > quotes.length - 1) {
@@ -31,17 +33,35 @@ const Quotes = () => {
     });
   };
 
+  const randomQuote = () => {
+    let randomNumber = Math.floor(Math.random() * quotes.length);
+    if (randomNumber === index) {
+      randomNumber = index + 1;
+    }
+    setIndex(checkNumber(randomNumber));
+  };
+
+  useEffect(() => {
+    axios
+      .get("https://dog.ceo/api/breeds/image/random")
+      .then((response) => {
+        setProfileImage(response.data.message);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }, [index]);
+
   return (
     <article className="review">
       <div className="img-container">
-        <img
-          src={"https://i.pravatar.cc/300"}
-          alt={"quote"}
-          className="quote-img"
-        />
+        <img src={profileImage} alt={"quote"} className="quote-img" />
+        <span className="quote-icon">
+          <FaQuoteRight />
+        </span>
       </div>
       <h4 className="author">{author}</h4>
-      <p className="info">{text}</p>
+      <p className="info">{quote}</p>
       <div className="button-container">
         <button className="prev-btn" onClick={prevQuote}>
           <FaChevronLeft />
@@ -50,7 +70,12 @@ const Quotes = () => {
           <FaChevronRight />
         </button>
       </div>
-      <button className="random-btn">surprise me</button>
+      <button className="random-btn" onClick={randomQuote}>
+        surprise me
+      </button>
+      <div className="quote-index">
+        {index + 1} / {quotes.length}
+      </div>
     </article>
   );
 };
